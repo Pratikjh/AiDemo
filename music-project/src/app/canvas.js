@@ -24,9 +24,6 @@ export default function Canvas(note) {
                 p.fill(color);
                 p.ellipse(xPos + 75, canvasHeight / 2, 100, 100); // Draw a circle at the mapped position
             }
-            return () => {
-                canvas.remove(); // Cleanup the canvas when the component unmounts
-            };
         };
         const mapNote=(note)=>{
             const spacing=canvasWidth/13;
@@ -47,7 +44,24 @@ export default function Canvas(note) {
             return notePositions[note] || 0; // Default to 0 if note is not found
         };
         const canvas =new p5(sketch,canvasRef.current);
+        return () => {
+            canvas.remove(); // Cleanup the canvas when the component unmounts
+        };
     },[note,color]); // Re-run the effect when note or color changes
-
+    useEffect(() => {
+        if(note){
+            if(note.note === "C"){
+                setColor([255,0,0]); // Red for C
+            }else if(note.note === "D"){
+                setColor([0,255,0]); // Green for D
+            }else if(note.note === "E"){
+                setColor([0,0,255]); // Blue for E
+            }else if(note.note === "F"){
+                setColor([255,255,0]); // Yellow for F
+            }else if(note.note === "G"){        
+                setColor([255,0,255]); // Magenta for G     
+            }
+        }
+    },[note]); // Re-run the effect when note changes
     return <div ref={canvasRef}></div>;
 }
